@@ -1,13 +1,12 @@
-import './App.css';
-import Login from './pages/Login';
-import StudentQuizPage from "./pages/StudentQuizPage";
+import React from "react";
+import Admin from "./pages/Admin page/Admin";
+
 
 function App() {
   return (
-    <div className="App">
-      <StudentQuizPage />
-    </div>
+    <Admin/>
   );
 }
 
 export default App;
+
