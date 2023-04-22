@@ -1,10 +1,12 @@
 from threading import Thread
 import paho.mqtt.client as mqtt
+import rat_tracker
 
 broker, port = "mqtt20.iik.ntnu.no", 1883
+ratTracker = rat_tracker.RatTracker()
 
 
-class MQTT_Server:
+class Server:
     def __init__(self):
         self.count = 0
         print(self.count)
@@ -14,8 +16,12 @@ class MQTT_Server:
 
     def on_message(self, client, userdata, msg):
         print("on_message(): topic: {}".format(msg.topic))
+
+        if "team9/request/" in msg.topic:
+            ratTracker.rat_logic(msg)
+
         self.count = self.count + 1
-        if self.count == 10:
+        if self.count == 3:
             self.client.disconnect()
             print("disconnected after 20 messages")
 
@@ -35,5 +41,5 @@ class MQTT_Server:
             self.client.disconnect()
 
 
-myclient = MQTT_Server()
-myclient.start(broker, port)
+server = Server()
+server.start(broker, port)
