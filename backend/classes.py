@@ -25,6 +25,15 @@ class User(RatHolder):
         self.password = password
         self.is_admin = is_admin
 
+    def get_username(self):
+        return self.username
+
+    def get_password(self):
+        return self.password
+
+    def get_is_admin(self):
+        return self.is_admin
+
 
 class Rat:
     def __init__(self, number):
