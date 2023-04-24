@@ -32,3 +32,10 @@ def text_to_json(text, response):
         "response": response
     }
     return json.dumps(return_json)
+
+
+def read_RAT_Question(rat = 'rat_array.txt'):
+    with open(rat, 'r') as file:
+        data = json.loads(file.read())
+        
+    return data
