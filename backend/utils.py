@@ -1,8 +1,9 @@
 import classes
+import json
 
 
-def read_group_file():
-    with open("groups.txt") as file:
+def read_group_file(file_name="groups.txt"):
+    with open(file_name) as file:
         groups = []
         for line in file:
             group_info = line.strip().split(":")
@@ -23,7 +24,7 @@ def read_group_file():
         for i, group in enumerate(groups, 1):
             for user in group.members:
                 return_users.append(user)
-        return group, return_users
+        return groups, return_users
 
 
 def text_to_json(text, response):
@@ -34,8 +35,8 @@ def text_to_json(text, response):
     return json.dumps(return_json)
 
 
-def read_RAT_Question(rat = 'rat_array.txt'):
-    with open(rat, 'r') as file:
+def read_rats_file(file_name='rat_array.txt'):
+    with open(file_name, 'r') as file:
         data = json.loads(file.read())
-        
+
     return data

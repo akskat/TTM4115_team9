@@ -3,6 +3,7 @@ import paho.mqtt.client as mqtt
 import rat_tracker
 import sign_in
 import utils
+import json
 
 
 class Server:
@@ -11,6 +12,7 @@ class Server:
         self.client = mqtt.Client()
         # read groups and users from file
         self.groups, self.users = utils.read_group_file()
+        self.rats = utils.read_rats_file()
         # Sets up the RAT tracker
         self.rat_tracker = rat_tracker.RatTracker(self.groups, self.users)
         print("Server initialised")
@@ -21,10 +23,11 @@ class Server:
     def on_message(self, client, userdata, msg):
         print("on_message(): topic: {}".format(msg.topic))
 
-        if "team9/request/" in msg.topic:
-            self.rat_tracker.rat_logic(msg)
+        if "request/" in msg.topic:
+            message = self.rat_tracker.rat_logic(msg)
+            print(json.loads(message))
 
-        elif "team9/login/" in msg.topic:
+        elif "login/" in msg.topic:
             sign_in.verify_user(msg, self.groups)
 
         self.count = self.count + 1
@@ -41,7 +44,7 @@ class Server:
         print("Connecting to {}:{}".format(broker, port))
         self.client.connect(broker, port)
 
-        self.client.subscribe("team9/#")
+        self.client.subscribe("group9/#")
         try:
             thread = Thread(target=self.client.loop_forever)
             thread.start()

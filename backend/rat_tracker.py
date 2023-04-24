@@ -27,30 +27,30 @@ class RatTracker:
 
     def check_answer(self, user, json_msg):
         rat = self.rats[user.current_rat]
-        return rat.check_answer(user, json_msg.question_number, json_msg.option)
+        return rat.check_answer(user, json_msg["question_number"], json_msg["option"])
 
     def get_user(self, topic):
-        if "group" in topic:
-            topic_length = len("team9/request/group")
-            group_number = int(topic(topic_length))
+        if "request/group" in topic:
+            topic_length = len("group9/request/group")
             try:
-                return int(group_number), 0
+                return int(topic(topic_length)), 0
             except ValueError:
                 return "Invalid group number", -1
         else:
             username = ""
-            topic_length = len("team9/request/")
+            topic_length = len("group9/request/")
             slash_index = 0
             for i, letter in enumerate(topic, topic_length):
                 if letter == "/":
-                    slash_index = i
+                    slash_index = i - 1
                     break
 
-            for i in range(13, slash_index):
-                username += topic(i)
+            for i in range(topic_length, slash_index):
+                username += topic[i]
 
             # Checks if user is an admin
-            for i, user in enumerate(self.groups[0]):
+            print(self.groups[0])
+            for i, user in enumerate(self.groups[0].members):
                 if username == user.username:
                     return i, 1
 
@@ -62,21 +62,21 @@ class RatTracker:
             return "Invalid user", -1
 
     def rat_logic(self, msg):
-        # expected topic /team9/request/username/rat/question
-        # expected topic /team9/request/group"Number"/rat/question
+        # expected topic /group9/request/username/rat/question
+        # expected topic /group9/request/group"Number"/rat/question
         user = ""
         user_index, type = self.get_user(msg.topic)
-        if user_index.isnumeric():
+        try:
             if type == 0:
                 # is a group
-                user = self.groups[user]
+                user = self.groups[user_index]
             elif type == 1:
                 # is a admin
-                user = self.groups[0][i]
+                user = self.groups[0][user_index]
             elif type == 2:
                 # is a user
-                user = self.users[user]
-        else:
+                user = self.users[user_index]
+        except ValueError:
             return utils.text_to_json(user_index, 404)
 
         json_msg = json.loads(msg.payload.decode("utf-8"))
@@ -88,7 +88,7 @@ class RatTracker:
             if user.current_rat != -1:
                 return utils.text_to_json("Another RAT is under process", 400)
 
-            rat_index = self.get_rat(json_msg.code)
+            rat_index = self.get_rat(json_msg["code"])
             if rat_index.isnumeric():
                 # Checks if RAT has already been completed
                 for i, rat in enumerate(user.completed_rats):

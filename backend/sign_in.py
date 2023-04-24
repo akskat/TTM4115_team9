@@ -1,4 +1,5 @@
 import json
+import utils
 
 
 def verify_user(msg, groups):
@@ -11,12 +12,10 @@ def verify_user(msg, groups):
         for group in groups:
             # Iterate through each member of the group
             for member in group.members:
-                # check if the current member's login details matches the data base
+                # check if the current member's login details matches the database
                 if member.username == username and member.password == password:
-                    print("You are logged in as username: {} with password: {}".format(member.username, member.password))
-                    print("You belong to group nr.: {}".format(group.group_number))
-                    return
+                    return utils.text_to_json("Logged in", 200)
 
-        print("Wrong login! username: {} with password: {}".format(username, password))
+        return utils.text_to_json("Invalid username or password", 403)
     except(KeyError, ValueError):
-        print("Invalid JSON format on login")
+        return utils.text_to_json("Invalid request", 400)
