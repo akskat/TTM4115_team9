@@ -3,13 +3,14 @@ from datetime import datetime
 
 class RatHolder:
     def __init__(self):
-        # index of completed rats
+        # index of completed rats + answers
         self.completed_rats = []
         # index of current rat
         self.current_rat = -1
         # for each question the order of which the questions are answered is saved
         self.current_answers = []
-        self.time_started = datetime.now()
+        self.current_correct = 0
+        self.time_started = 0
 
     def add_to_completed(self, completed_number):
         self.completed_rats.append(completed_number)
@@ -43,8 +44,8 @@ class User(RatHolder):
 
 
 class Rat:
-    def __init__(self, number, rat_code):
-        self.number = number
+    def __init__(self, name, rat_code):
+        self.name = name
         self.rat_code = rat_code
         self.questions = []
 
@@ -80,54 +81,3 @@ class Rat:
                     break
                 return "Invalid answer"
         return "Invalid question"
-# {
-# Quiz number,
-# RAT code,
-# List of questions:
-#   [
-#       [
-#           Question text,
-#           [
-#               [answer text, is right],
-#               [answer text, is right],
-#               [answer text, is right],
-#               [answer text, is right]
-#           ]
-#       ]
-#   ]
-# }
-
-# rat_array = [
-#     {
-#         "number": 1,
-#         "questions": [
-#             [
-#                 1,
-#                 [
-#                     ["test", True],
-#                     ["test", False],
-#                     ["test", False],
-#                     ["test", False]
-#                 ]
-#             ],
-#             [
-#                 2,
-#                 [
-#                     ["test", True],
-#                     ["test", False],
-#                     ["test", False],
-#                     ["test", False]
-#                 ]
-#             ],
-#             [
-#                 3,
-#                 [
-#                     ["test", True],
-#                     ["test", False],
-#                     ["test", False],
-#                     ["test", False]
-#                 ]
-#             ]
-#         ]
-#     },
-# ]

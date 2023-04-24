@@ -10,7 +10,7 @@ class Server:
         self.count = 0
         self.client = mqtt.Client()
         # read groups and users from file
-        self.groups, self.users = utils.read_file()
+        self.groups, self.users = utils.read_group_file()
         # Sets up the RAT tracker
         self.rat_tracker = rat_tracker.RatTracker(self.groups, self.users)
         print("Server initialised")
