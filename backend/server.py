@@ -2,34 +2,18 @@ from threading import Thread
 import paho.mqtt.client as mqtt
 import rat_tracker
 import sign_in
-import classes
+import utils
 
 
 class Server:
     def __init__(self):
         self.count = 0
         self.client = mqtt.Client()
-        print("Server initialised")
-        
-        # read groups from file
-        self.groups = []
-        self.users = []
-        with open("groups.txt") as file:
-            for line in file:
-                group_info = line.strip().split(":")
-                group_name = group_info[0]
-                users_info = group_info[1:]
-                for i in range(0, len(users_info), 2):
-                    username = users_info[i]
-                    password = users_info[i+1]
-                    user = classes.User(username, password)
-                    self.users.append(user)
-                    group = classes.Group(group_name)
-                    for user in self.users:
-                        group.add_member(user)
-                    self.groups.append(group)
+        # read groups and users from file
+        self.groups, self.users = utils.read_file()
         # Sets up the RAT tracker
         self.rat_tracker = rat_tracker.RatTracker(self.groups, self.users)
+        print("Server initialised")
 
     def on_connect(self, client, userdata, flags, rc):
         print("on_connect(): {}".format(mqtt.connack_string(rc)))
