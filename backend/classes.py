@@ -75,9 +75,10 @@ class Rat:
         for question in enumerate(self.questions):
             option_array = []
             for option in enumerate(question[1]):
-                option_array.append(option[0])
                 if get_solution:
-                    option_array.append(option[1])
+                    option_array.append([option[0], option[1]])
+                else:
+                    option_array.append(option[0])
             question_array.append([question[0], option_array])
         rat_json = {
             "name": self.name,
