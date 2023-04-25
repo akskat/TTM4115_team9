@@ -37,6 +37,27 @@ def text_to_json(text, response):
 
 def read_rats_file(file_name='rat_array.txt'):
     with open(file_name, 'r') as file:
-        data = json.loads(file.read())
+        data = json.load(file)
+
+    rats = []
+    for rat_data in data:
+        rat_name = rat_data['rat_name']
+
+        rat = classes.Rat(rat_name, None)
+
+        for questions_data in rat_data['questions']:
+            question_number, answers = questions_data
+
+            questions_text = f"Question {question_number}: {answers[0][0]}"
+
+            array_of_answer = []
+            for answer in answers:
+                array_of_answer.append([answer[0], answer[1]])
+
+            rat.add_question(questions_text, array_of_answer)
+
+        rats.append(rat)
+
+    
 
     return data
