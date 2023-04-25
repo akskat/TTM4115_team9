@@ -8,7 +8,6 @@ import json
 
 class Server:
     def __init__(self):
-        self.count = 0
         self.client = mqtt.Client()
         # read groups and users from file
         self.groups, self.users = utils.read_group_file()
@@ -25,18 +24,19 @@ class Server:
 
         if "request/" in msg.topic:
             message = self.rat_tracker.rat_logic(msg)
-            print(json.loads(message))
+            topic = msg.topic.replace("request", "publish")
+            self.post_message(message, topic)
 
         elif "login/" in msg.topic:
             sign_in.verify_user(msg, self.groups)
 
-        self.count = self.count + 1
-        if self.count == 5:
-            self.client.disconnect()
-            print("Disconnected after 5 messages")
         elif "STOP_SERVER" in msg.topic:
             self.client.disconnect()
             print("Got stop signal. Exiting")
+
+    def post_message(self, message_in_json, topic):
+        print("Posting: {} \nTopic: {}".format(message_in_json, topic))
+        self.client.publish(topic, message_in_json)
 
     def start(self, broker, port):
         self.client.on_connect = self.on_connect

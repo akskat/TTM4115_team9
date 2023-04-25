@@ -1,9 +1,6 @@
-from datetime import datetime
-
-
 class RatHolder:
     def __init__(self):
-        # index of completed rats + answers
+        # index of completed rats + time taken + answers
         self.completed_rats = []
         # index of current rat
         self.current_rat = -1
@@ -12,8 +9,24 @@ class RatHolder:
         self.current_correct = 0
         self.time_started = 0
 
-    def add_to_completed(self, completed_number):
-        self.completed_rats.append(completed_number)
+    def reset_rat_holder(self, time_taken):
+        self.completed_rats.append([self.current_rat, time_taken, self.current_answers])
+        self.current_rat = -1
+        self.current_answers = []
+        self.current_correct = 0
+        self.time_started = 0
+
+    def get_score(self):
+        return_json = []
+        for i, rat in enumerate(self.completed_rats):
+            rat_json = {
+                "number": i,
+                "time_taken": rat[1],
+                "answers": rat[2]
+            }
+
+            return_json.append(rat_json)
+        return return_json
 
 
 class Group(RatHolder):
@@ -48,17 +61,26 @@ class Rat:
         self.name = name
         self.rat_code = rat_code
         self.questions = []
+        # Array of options
+        # [ text1, true/false ]
+        # [ text2, true/false ]
+        # [ text3, true/false ]
+        # [ text4, true/false ]
 
-    def add_question(self, question_text, array_of_answers):
-        self.questions = [question_text, array_of_answers]
+    def add_question(self, question_text, array_of_options):
+        self.questions.append([question_text, array_of_options])
 
-    def get_rat_json(self):
+    def get_rat_json(self, get_solution=False):
         question_array = []
         for question in enumerate(self.questions):
-            question_array.append(question[0])
-            question_array.append(question[1])
+            option_array = []
+            for option in enumerate(question[1]):
+                option_array.append(option[0])
+                if get_solution:
+                    option_array.append(option[1])
+            question_array.append([question[0], option_array])
         rat_json = {
-            "number": self.number,
+            "name": self.name,
             "questions": question_array
         }
         return rat_json
@@ -77,7 +99,8 @@ class Rat:
                             return True
                         else:
                             return False
-
                     break
                 return "Invalid answer"
         return "Invalid question"
+
+

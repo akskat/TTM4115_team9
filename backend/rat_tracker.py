@@ -1,15 +1,6 @@
 from datetime import datetime
 import json
-import classes
 import utils
-
-
-def reset_rat_holder(user, time_taken):
-    user.completed_rats.append([user.current_rat, time_taken, user.current_answers])
-    user.current_rat = -1
-    user.current_answers = []
-    user.current_correct = 0
-    user.time_started = 0
 
 
 class RatTracker:
@@ -49,7 +40,6 @@ class RatTracker:
                 username += topic[i]
 
             # Checks if user is an admin
-            print(self.groups[0])
             for i, user in enumerate(self.groups[0].members):
                 if username == user.username:
                     return i, 1
@@ -61,19 +51,31 @@ class RatTracker:
 
             return "Invalid user", -1
 
+    def get_leaderboard(self):
+        users = []
+        groups = []
+        rats = []
+        for user in self.users:
+            users.append(user.get_score())
+        for group in self.groups:
+            groups.append(group.get_score())
+        for rat in self.rats:
+            rats.append(rat.get_rat_json(True))
+        return users, groups, rats
+
     def rat_logic(self, msg):
         # expected topic /group9/request/username/rat/question
         # expected topic /group9/request/group"Number"/rat/question
         user = ""
-        user_index, type = self.get_user(msg.topic)
+        user_index, type_of_user = self.get_user(msg.topic)
         try:
-            if type == 0:
+            if type_of_user == 0:
                 # is a group
                 user = self.groups[user_index]
-            elif type == 1:
+            elif type_of_user == 1:
                 # is a admin
                 user = self.groups[0][user_index]
-            elif type == 2:
+            elif type_of_user == 2:
                 # is a user
                 user = self.users[user_index]
         except ValueError:
@@ -112,7 +114,7 @@ class RatTracker:
             # }
             if (datetime.now() - user.time_started).seconds / 60 >= 20:
                 if user.current_rat != -1:
-                    reset_rat_holder(user, 20)
+                    user.reset_rat_holder(20)
                     return utils.text_to_json("Time limit exceeded", 400)
                 else:
                     return utils.text_to_json("RAT already completed", 400)
@@ -121,7 +123,7 @@ class RatTracker:
             if answer_response:
                 user.current_correct += 1
                 if user.current_correct == len(self.rats[user.current_rat].questions):
-                    reset_rat_holder(user, (datetime.now() - user.time_started).seconds / 60)
+                    user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
                     return utils.text_to_json("Completed RATs", 200)
 
                 return utils.text_to_json("Correct answer", 200)
@@ -131,6 +133,13 @@ class RatTracker:
                 return utils.text_to_json("Invalid answer", 404)
         elif "/rat/leaderboard" in msg.topic:
             if user.is_admin:
-                return utils.text_to_json("Leaderboard", 200)
+                users, groups, rats = self.get_leaderboard()
+                return_json = {
+                    "users": users,
+                    "groups": groups,
+                    "rats": rats,
+                    "response": 200
+                }
+                return return_json
             else:
                 return utils.text_to_json("Unauthorised", 401)
