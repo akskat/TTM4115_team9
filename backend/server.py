@@ -30,7 +30,7 @@ class Server:
         elif "login/" in msg.topic:
             sign_in.verify_user(msg, self.groups)
 
-        elif "STOP_SERVER" in msg.topic:
+        elif "STOP" in msg.topic:
             self.client.disconnect()
             print("Got stop signal. Exiting")
 

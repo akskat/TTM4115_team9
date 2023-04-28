@@ -86,22 +86,13 @@ class Rat:
         }
         return rat_json
 
-    def check_answer(self, user, question_number, option):
-        #  Loops through the questions in given RAT
-        for i, question in enumerate(self.questions):
-            #  Finds right question
-            if question_number - 1 == i:
-                #  Loops through all the answer options for the questions
-                for j, answer in enumerate(question[2]):
-                    #  Finds the right answer option
-                    if option - 1 == j:
-                        user.current_answers[i].append(j)
-                        if answer[1]:
-                            return True
-                        else:
-                            return False
-                    break
-                return "Invalid answer"
-        return "Invalid question"
-
+    def check_answer(self, user, question_number, option_number):
+        try:
+            user.current_answers[question_number - 1].append(option_number - 1)
+            if self.questions[question_number - 1][1][option_number - 1][1]:
+                return True
+            else:
+                return False
+        except IndexError:
+            return "Invalid question or answer"
 
