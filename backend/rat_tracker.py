@@ -81,8 +81,9 @@ class RatTracker:
         return users, groups, rats
 
     def rat_logic(self, msg):
-        # expected topic /group9/request/username/rat/question
-        # expected topic /group9/request/group"Number"/rat/question
+        # expected topic /group9/request/username/rat
+        # expected topic /group9/request/username/question
+        # expected topic /group9/request/username/leaderboard
         user = ""
         user_index, type_of_user = self.get_user(msg.topic)
         user_group_index = -1
@@ -132,10 +133,13 @@ class RatTracker:
             else:
                 return utils.text_to_json(rat_index, 404)
         elif "/question" in msg.topic:
-            # expected =
+            # expected = {
             #     "question": "number (1-10)"
             #     "option": "option_number (1-4)"
             # }
+            if user.current_rat == -1:
+                return utils.text_to_json("There is no current RAT", 404)
+
             if (datetime.now() - user.time_started).seconds / 60 >= 20:
                 user.reset_rat_holder(20)
                 return utils.text_to_json("Time limit exceeded", 403)
