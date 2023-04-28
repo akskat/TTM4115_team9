@@ -72,9 +72,9 @@ class Rat:
 
     def get_rat_json(self, get_solution=False):
         question_array = []
-        for question in enumerate(self.questions):
+        for question in self.questions:
             option_array = []
-            for option in enumerate(question[1]):
+            for option in question[1]:
                 if get_solution:
                     option_array.append([option[0], option[1]])
                 else:

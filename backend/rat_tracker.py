@@ -4,8 +4,8 @@ import utils
 
 
 class RatTracker:
-    def __init__(self, groups, users):
-        self.rats = []
+    def __init__(self, rats, groups, users):
+        self.rats = rats
         self.groups = groups
         self.users = users
 
@@ -91,7 +91,7 @@ class RatTracker:
                 return utils.text_to_json("Another RAT is under process", 400)
 
             rat_index = self.get_rat(json_msg["code"])
-            if rat_index.isnumeric():
+            if isinstance(rat_index, int):
                 # Checks if RAT has already been completed
                 for i, rat in enumerate(user.completed_rats):
                     if rat_index == rat[0]:
@@ -100,8 +100,6 @@ class RatTracker:
                 # Initialises current data
                 user.current_rat = rat_index
                 user.time_started = datetime.now()
-                for i in enumerate(self.rats[rat_index].questions):
-                    user.current_answers[i] = []
 
                 # Returns the RAT with questions in JSON format
                 return utils.text_to_json(self.rats[rat_index].get_rat_json(), 200)

@@ -13,7 +13,7 @@ class Server:
         self.groups, self.users = utils.read_group_file()
         self.rats = utils.read_rats_file()
         # Sets up the RAT tracker
-        self.rat_tracker = rat_tracker.RatTracker(self.groups, self.users)
+        self.rat_tracker = rat_tracker.RatTracker(self.rats, self.groups, self.users)
         print("Server initialised")
 
     def on_connect(self, client, userdata, flags, rc):

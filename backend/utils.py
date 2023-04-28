@@ -42,8 +42,9 @@ def read_rats_file(file_name='rat_array.txt'):
     rats = []
     for rat_data in data:
         rat_name = rat_data['rat_name']
+        rat_code = rat_data['rat_code']
 
-        rat = classes.Rat(rat_name, None)
+        rat = classes.Rat(rat_name, rat_code)
 
         for questions_data in rat_data['questions']:
             question_number, answers = questions_data
@@ -58,6 +59,4 @@ def read_rats_file(file_name='rat_array.txt'):
 
         rats.append(rat)
 
-    
-
-    return data
+    return rats
