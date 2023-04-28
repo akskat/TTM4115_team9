@@ -54,6 +54,12 @@ class RatTracker:
 
             return "Invalid user", -1
 
+    def find_group(self, user):
+        for i, group in enumerate(self.groups):
+            for member in group.members:
+                if member.username == user.username:
+                    return i
+
     def get_leaderboard(self):
         users = []
         groups = []
@@ -79,6 +85,7 @@ class RatTracker:
         # expected topic /group9/request/group"Number"/rat/question
         user = ""
         user_index, type_of_user = self.get_user(msg.topic)
+        user_group_index = -1
         if isinstance(user_index, int):
             if type_of_user == 0:
                 # is a group
@@ -90,6 +97,7 @@ class RatTracker:
             elif type_of_user == 2:
                 # is a user
                 user = self.users[user_index]
+                user_group_index = find_group(user)
         else:
             return utils.text_to_json(user_index, 404)
 
@@ -100,21 +108,25 @@ class RatTracker:
             #     "code": "code_here"
             # }
             if user.current_rat != -1:
-                return utils.text_to_json("Another RAT is under process", 400)
+                return utils.text_to_json("Another RAT is under process", 403)
+
+            if type_of_user == 0 and user.active_members != 0:
+                return utils.text_to_json("Some members are still doing the RAT", 403)
 
             rat_index = self.get_rat(json_msg["code"])
             if isinstance(rat_index, int):
                 # Checks if RAT has already been completed
                 for i, rat in enumerate(user.completed_rats):
                     if rat_index == rat[0]:
-                        return utils.text_to_json("RAT already completed", 400)
+                        return utils.text_to_json("RAT already completed", 403)
 
                 # Initialises current data
                 for question in self.rats[rat_index].questions:
                     user.current_answers.append([])
                 user.current_rat = rat_index
                 user.time_started = datetime.now()
-
+                if type_of_user != 0:
+                    self.groups[user_group_index].active_members += 1
                 # Returns the RAT with questions in JSON format
                 return utils.text_to_json(self.rats[rat_index].get_rat_json(), 200)
             else:
@@ -125,17 +137,16 @@ class RatTracker:
             #     "option": "option_number (1-4)"
             # }
             if (datetime.now() - user.time_started).seconds / 60 >= 20:
-                if user.current_rat != -1:
-                    user.reset_rat_holder(20)
-                    return utils.text_to_json("Time limit exceeded", 400)
-                else:
-                    return utils.text_to_json("RAT already completed", 400)
+                user.reset_rat_holder(20)
+                return utils.text_to_json("Time limit exceeded", 403)
 
             answer_response = self.check_answer(user, json_msg)
             if answer_response:
                 user.current_correct += 1
                 if user.current_correct == len(self.rats[user.current_rat].questions):
                     user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
+                    if type_of_user != 0:
+                        self.groups[user_group_index].active_members -= 1
                     return utils.text_to_json("Completed RAT", 200)
 
                 return utils.text_to_json("Correct answer", 200)
