@@ -97,7 +97,7 @@ class RatTracker:
             elif type_of_user == 2:
                 # is a user
                 user = self.users[user_index]
-                user_group_index = find_group(user)
+                user_group_index = self.find_group(user)
         else:
             return utils.text_to_json(user_index, 404)
 
