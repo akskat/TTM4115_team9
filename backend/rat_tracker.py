@@ -4,10 +4,10 @@ import utils
 
 
 class RatTracker:
-    def __init__(self, groups, users):
-        self.rats = []
-        self.groups = groups
+    def __init__(self, groups, users, rats):
         self.users = users
+        self.groups = groups
+        self.rats = rats
 
     def get_rat(self, rat_code):
         for i, rat in enumerate(self.rats):
