@@ -34,6 +34,7 @@ class Group(RatHolder):
         super().__init__()
         self.group_number = group_number
         self.members = []
+        self.active_members = 0
 
     def add_member(self, user):
         self.members.append(user)
@@ -72,9 +73,9 @@ class Rat:
 
     def get_rat_json(self, get_solution=False):
         question_array = []
-        for question in enumerate(self.questions):
+        for question in self.questions:
             option_array = []
-            for option in enumerate(question[1]):
+            for option in question[1]:
                 if get_solution:
                     option_array.append([option[0], option[1]])
                 else:
@@ -86,22 +87,13 @@ class Rat:
         }
         return rat_json
 
-    def check_answer(self, user, question_number, option):
-        #  Loops through the questions in given RAT
-        for i, question in enumerate(self.questions):
-            #  Finds right question
-            if question_number - 1 == i:
-                #  Loops through all the answer options for the questions
-                for j, answer in enumerate(question[2]):
-                    #  Finds the right answer option
-                    if option - 1 == j:
-                        user.current_answers[i].append(j)
-                        if answer[1]:
-                            return True
-                        else:
-                            return False
-                    break
-                return "Invalid answer"
-        return "Invalid question"
-
+    def check_answer(self, user, question_number, option_number):
+        try:
+            user.current_answers[question_number - 1].append(option_number - 1)
+            if self.questions[question_number - 1][1][option_number - 1][1]:
+                return True
+            else:
+                return False
+        except IndexError:
+            return "Invalid question or answer"
 

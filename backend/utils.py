@@ -59,4 +59,4 @@ def read_rats_file(file_name='rat_array.txt'):
 
         rats.append(rat)
 
-    return data
+    return rats

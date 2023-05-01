@@ -13,7 +13,7 @@ class Server:
         self.groups, self.users = utils.read_group_file()
         self.rats = utils.read_rats_file()
         # Sets up the RAT tracker
-        self.rat_tracker = rat_tracker.RatTracker(self.groups, self.users, self.rats)
+        self.rat_tracker = rat_tracker.RatTracker(self.rats, self.groups, self.users)
         print("Server initialised")
 
     def on_connect(self, client, userdata, flags, rc):
@@ -30,7 +30,7 @@ class Server:
         elif "login/" in msg.topic:
             sign_in.verify_user(msg, self.groups)
 
-        elif "STOP_SERVER" in msg.topic:
+        elif "STOP" in msg.topic:
             self.client.disconnect()
             print("Got stop signal. Exiting")
 
