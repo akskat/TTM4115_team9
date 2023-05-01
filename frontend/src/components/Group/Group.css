@@ -1,0 +1,181 @@
+.group-list,
+.group-create,
+.group-details,
+.group-edit {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.group-list ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+.group-list li {
+  margin-bottom: 0.5rem;
+}
+
+.group-create form,
+.group-edit form {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-create input,
+.group-edit input {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.group-create button,
+.group-edit button {
+  padding: 0.5rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.group-create button:hover,
+.group-edit button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+.group-create-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.group-create-header {
+  font-size: 24px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.group-create-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.group-create-label {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.group-create-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.group-create-students-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.group-create-add-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.group-create-students-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.group-create-students-list li {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.group-create-submit-button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.group-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  }
+  
+  .group-details h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  }
+  
+  .group-details p {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  }
+  
+  .group-details ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  }
+  
+  .group-details ul li {
+  margin-bottom: 10px;
+  }
+  
+  .group-details ul li::before {
+  content: "•";
+  color: #007bff;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+  }
+  
+  .group-details ul li span {
+  margin-left: 5px;
+  }
+  
+  .group-details button {
+  background-color: #c82333;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  }
+  
+  

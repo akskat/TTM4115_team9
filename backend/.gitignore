@@ -15,5 +15,5 @@ build/
 *.sqlite
 *.idea/
 *.vscode/
-*.venv
+venv/
 *.env

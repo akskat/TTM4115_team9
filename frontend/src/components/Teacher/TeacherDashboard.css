@@ -1,0 +1,139 @@
+.teacher-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.teacher-dashboard h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.teacher-dashboard .groups-section,
+.teacher-dashboard .quizzes-section {
+  margin-bottom: 50px;
+  width: 80%;
+}
+
+.teacher-dashboard .groups-section h3,
+.teacher-dashboard .quizzes-section h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.teacher-dashboard ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.teacher-dashboard ul li {
+  margin-bottom: 10px;
+}
+
+.teacher-dashboard ul li a {
+  font-size: 1.2rem;
+  color: #000;
+  text-decoration: none;
+}
+
+.teacher-dashboard ul li a:hover {
+  text-decoration: underline;
+}
+
+.teacher-dashboard .groups-section a {
+  display: block;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: #fff;
+  background-color: #007bff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.teacher-dashboard .groups-create-section a {
+  display: block;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: #fff;
+  background-color: #19d419;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+
+.teacher-dashboard .quizzes-section a {
+  display: block;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: #fff;
+  background-color: #007bff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.teacher-dashboard .quizzes-create-section a {
+  display: block;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: #fff;
+  background-color: #19d419;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+
+.leaderboard {
+  margin-top: 50px;
+}
+
+.leaderboard h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.leaderboard table {
+  border-collapse: collapse;
+  width: 80%;
+}
+
+.leaderboard th,
+.leaderboard td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.leaderboard th {
+  text-align: left;
+}
+
+.leaderboard tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+.logout-button {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  background-color: rgb(115, 119, 117);
+  color: rgb(255, 255, 255);
+  padding: 10px;
+  border: grey;
+  cursor: pointer;
+  border-radius: 5px;
+  
+}
+
+

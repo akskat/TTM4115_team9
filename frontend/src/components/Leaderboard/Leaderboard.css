@@ -1,0 +1,23 @@
+.leaderboard {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard th,
+.leaderboard td {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.leaderboard th {
+  background-color: #f5f5f5;
+}
