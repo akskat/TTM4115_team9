@@ -5,7 +5,7 @@ import AdminOverview from "./AdminOverview";
 
 const Router = () => {
     const [isAdmin, setIsAdmin] = useState(false)
-    const [username, setUsername] = useState("user1")
+    const [username, setUsername] = useState("")
 
     const logInResponse = (response) => {
         if (response.data.message === "admin") {

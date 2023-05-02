@@ -22,10 +22,9 @@ def login():
     return sign_in.verify_user(data, groups, app_utils)
 
 
-@app.route("/<path:text>", methods = ['GET', 'POST'])
+@app.route("/<path:text>", methods = ['POST'])
 def requesting(text):
     if "request/" in text:
-        print(text)
         data = request.json
         return rat_tracker.rat_logic(data, text)
     else:
