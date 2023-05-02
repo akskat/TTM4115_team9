@@ -1,13 +1,12 @@
 from datetime import datetime
-import json
-import utils
 
 
 class RatTracker:
-    def __init__(self, rats, groups, users):
+    def __init__(self, rats, groups, users, utils):
         self.rats = rats
         self.groups = groups
         self.users = users
+        self.utils = utils
 
     def get_rat(self, rat_code):
         for i, rat in enumerate(self.rats):
@@ -16,9 +15,9 @@ class RatTracker:
 
         return "Invalid RAT code"
 
-    def check_answer(self, user, json_msg):
+    def check_answer(self, user, data):
         rat = self.rats[user.current_rat]
-        response = rat.check_answer(user, json_msg["question"], json_msg["option"])
+        response = rat.check_answer(user, data["question"], data["option"])
         return response
 
     def get_user(self, topic):
@@ -80,12 +79,12 @@ class RatTracker:
             rats.append(rat.get_rat_json(True))
         return users, groups, rats
 
-    def rat_logic(self, msg):
+    def rat_logic(self, data, api_path):
         # expected topic /group9/request/username/rat
         # expected topic /group9/request/username/question
         # expected topic /group9/request/username/leaderboard
         user = ""
-        user_index, type_of_user = self.get_user(msg.topic)
+        user_index, type_of_user = self.get_user(api_path)
         user_group_index = -1
         if isinstance(user_index, int):
             if type_of_user == 0:
@@ -100,26 +99,24 @@ class RatTracker:
                 user = self.users[user_index]
                 user_group_index = self.find_group(user)
         else:
-            return utils.text_to_json(user_index, 404)
+            return self.utils.text_to_json(user_index, 404)
 
-        json_msg = json.loads(msg.payload.decode("utf-8"))
-
-        if "/rat" in msg.topic:
+        if "/rat" in api_path:
             # expected = {
             #     "code": "code_here"
             # }
             if user.current_rat != -1:
-                return utils.text_to_json("Another RAT is under process", 403)
+                return self.utils.text_to_json("Another RAT is under process", 403)
 
             if type_of_user == 0 and user.active_members != 0:
-                return utils.text_to_json("Some members are still doing the RAT", 403)
+                return self.utils.text_to_json("Some members are still doing the RAT", 403)
 
-            rat_index = self.get_rat(json_msg["code"])
+            rat_index = self.get_rat(data["code"])
             if isinstance(rat_index, int):
                 # Checks if RAT has already been completed
                 for i, rat in enumerate(user.completed_rats):
                     if rat_index == rat[0]:
-                        return utils.text_to_json("RAT already completed", 403)
+                        return self.utils.text_to_json("RAT already completed", 403)
 
                 # Initialises current data
                 for question in self.rats[rat_index].questions:
@@ -129,44 +126,43 @@ class RatTracker:
                 if type_of_user != 0:
                     self.groups[user_group_index].active_members += 1
                 # Returns the RAT with questions in JSON format
-                return utils.text_to_json(self.rats[rat_index].get_rat_json(), 200)
+                return self.utils.text_to_json(self.rats[rat_index].get_rat_json(), 200, True)
             else:
-                return utils.text_to_json(rat_index, 404)
-        elif "/question" in msg.topic:
+                return self.utils.text_to_json(rat_index, 404)
+        elif "/question" in api_path:
             # expected = {
             #     "question": "number (1-10)"
             #     "option": "option_number (1-4)"
             # }
             if user.current_rat == -1:
-                return utils.text_to_json("There is no current RAT", 404)
+                return self.utils.text_to_json("There is no current RAT", 404)
 
             if (datetime.now() - user.time_started).seconds / 60 >= 20:
                 user.reset_rat_holder(20)
-                return utils.text_to_json("Time limit exceeded", 403)
+                return self.utils.text_to_json("Time limit exceeded", 403)
 
-            answer_response = self.check_answer(user, json_msg)
+            answer_response = self.check_answer(user, data)
             if answer_response:
                 user.current_correct += 1
                 if user.current_correct == len(self.rats[user.current_rat].questions):
                     user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
                     if type_of_user != 0:
                         self.groups[user_group_index].active_members -= 1
-                    return utils.text_to_json("Completed RAT", 200)
+                    return self.utils.text_to_json("Completed RAT", 200)
 
-                return utils.text_to_json("Correct answer", 200)
+                return self.utils.text_to_json("Correct answer", 200)
             elif not answer_response:
-                return utils.text_to_json("Incorrect answer", 200)
+                return self.utils.text_to_json("Incorrect answer", 200)
             else:
-                return utils.text_to_json("Invalid answer", 404)
-        elif "/leaderboard" in msg.topic:
+                return self.utils.text_to_json("Invalid answer", 404)
+        elif "/leaderboard" in api_path:
             if user.is_admin:
                 users, groups, rats = self.get_leaderboard()
                 return_json = {
                     "users": users,
                     "groups": groups,
                     "rats": rats,
-                    "status": 200
                 }
-                return json.dumps(return_json)
+                return self.utils.text_to_json(return_json, 200, True)
             else:
-                return utils.text_to_json("Unauthorised", 401)
+                return self.utils.text_to_json("Unauthorised", 401)

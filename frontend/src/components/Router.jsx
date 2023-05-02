@@ -1,32 +1,39 @@
 import React, {useState} from "react";
 import Login from "./Login"
 import Overview from "./Overview"
+import AdminOverview from "./AdminOverview";
 
 const Router = () => {
-    const [loggedIn, setLoggedIn] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
+    const [username, setUsername] = useState("user1")
 
     const logInResponse = (response) => {
-        if (response.status === 200) {
-            console.log("logged")
-            setLoggedIn(true)
-        }
-        if (response.data.data === "admin") {
-            console.log("logg234234ed")
-
+        if (response.data.message === "admin") {
             setIsAdmin(true)
         }
+        if (response.status === 200) {
+            setUsername(response.data.username)
+        }
+        else {
+            return alert(response)
+        }
+
     }
 
     return (
         <>
             {
-                loggedIn === false ?
+                username === "" ?
                     <Login
                         callback={logInResponse}
                     />
                 :
-                    <Overview/>
+                    isAdmin === false ?
+                        <Overview
+                            username={username}
+                        />
+                    :
+                        <AdminOverview/>
             }
         </>
     )

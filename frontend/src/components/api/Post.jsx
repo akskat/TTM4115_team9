@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const PostMelding = (data, url, callBack) => {
+const Post = (data, url, callBack) => {
     const headers = {
         'Content-Type': 'application/json'
     }
@@ -9,4 +9,4 @@ const PostMelding = (data, url, callBack) => {
         .catch(error => callBack(error.toString()));
 };
 
-export default PostMelding;
+export default Post;

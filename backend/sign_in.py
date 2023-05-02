@@ -1,7 +1,4 @@
-import utils
-
-
-def verify_user(data, groups):
+def verify_user(data, groups, utils):
     try:
         username = data["username"]
         password = data["password"]
@@ -12,9 +9,13 @@ def verify_user(data, groups):
             for member in group.members:
                 # check if the current member's login details matches the database
                 if member.username == username and member.password == password:
+                    response = {
+                        "username": username
+                    }
                     if group.group_number == "admin":
-                        return utils.text_to_json("admin", 200)
-                    return utils.text_to_json("OK", 200)
+                        response["message"] = "admin"
+                        return utils.text_to_json(response, 200, True)
+                    return utils.text_to_json(response, 200, True)
 
         return utils.text_to_json("Invalid username or password", 403)
     except(KeyError, ValueError):

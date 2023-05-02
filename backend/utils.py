@@ -2,6 +2,23 @@ import classes
 import json
 
 
+class Utils:
+    def __init__(self, app):
+        self.app = app
+
+    def text_to_json(self, text, response, is_formatted=False):
+        if not is_formatted:
+            text = {
+                "message": text
+            }
+        response = self.app.response_class(
+            response=json.dumps(text),
+            status=response,
+            mimetype='application/json'
+        )
+        return response
+
+
 def read_group_file(file_name="backend\\groups.txt"):
     with open(file_name) as file:
         groups = []
@@ -25,14 +42,6 @@ def read_group_file(file_name="backend\\groups.txt"):
             for user in group.members:
                 return_users.append(user)
         return groups, return_users
-
-
-def text_to_json(text, response):
-    return_json = {
-        "data": text,
-        "status": response
-    }
-    return json.dumps(return_json)
 
 
 def read_rats_file(file_name='backend\\rat_array.txt'):

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import PostMelding from "./api/PostMelding";
+import Post from "./api/Post";
 
 const Login = (props) => {
     const loginRequest = () => {
@@ -17,14 +16,15 @@ const Login = (props) => {
             "username": username,
             "password": password,
         }
-        PostMelding(data, "/login", props.callback)
+        Post(data, "/login", props.callback)
     }
 
     return (
         <>
+            <h1>Online RAT</h1>
             <input type="text" id="username" placeholder="Username"/>
             <input type="text" id="password" placeholder="Password"/>
-            <button className="submit" type={"button"} onClick={() => loginRequest()}>Login</button>
+            <button type="button" onClick={() => loginRequest()}>Login</button>
         </>
     )
 }
