@@ -165,7 +165,7 @@ class RatTracker:
                     "users": users,
                     "groups": groups,
                     "rats": rats,
-                    "response": 200
+                    "status": 200
                 }
                 return json.dumps(return_json)
             else:
