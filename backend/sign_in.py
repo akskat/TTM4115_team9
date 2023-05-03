@@ -13,9 +13,6 @@ def verify_user(data, groups, utils):
                         "username": username,
                         "group": group.group_number
                     }
-                    if group.group_number == "admin":
-                        response["message"] = "admin"
-                        return utils.text_to_json(response, 200, True)
                     return utils.text_to_json(response, 200, True)
 
         return utils.text_to_json("Invalid username or password", 403)
