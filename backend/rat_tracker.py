@@ -105,13 +105,14 @@ class RatTracker:
             # expected = {
             #     "code": "code_here"
             # }
-            if user.current_rat != -1:
+            rat_index = self.get_rat(data["code"])
+
+            if user.current_rat != rat_index and user.current_rat != -1:
                 return self.utils.text_to_json("Another RAT is under process", 403)
 
-            if type_of_user == 0 and user.active_members != 0:
+            if type_of_user == 0 and len(user.active_members) != 0 and user.username not in self.groups[user_group_index].active_members:
                 return self.utils.text_to_json("Some members are still doing the RAT", 403)
 
-            rat_index = self.get_rat(data["code"])
             if isinstance(rat_index, int):
                 # Checks if RAT has already been completed
                 for i, rat in enumerate(user.completed_rats):
@@ -119,21 +120,16 @@ class RatTracker:
                         return self.utils.text_to_json("RAT already completed", 403)
 
                 # Initialises current data
-                for question in self.rats[rat_index].questions:
-                    user.current_answers.append([])
                 user.current_rat = rat_index
                 user.time_started = datetime.now()
                 if type_of_user != 0:
-                    self.groups[user_group_index].active_members += 1
+                    self.groups[user_group_index].active_members.append(user.username)
                 # Returns the RAT with questions in JSON format
                 return self.utils.text_to_json(self.rats[rat_index].get_rat_json(), 200, True)
             else:
                 return self.utils.text_to_json(rat_index, 404)
         elif "/question" in api_path:
-            # expected = {
-            #     "question": "number (1-10)"
-            #     "option": "option_number (1-4)"
-            # }
+
             if user.current_rat == -1:
                 return self.utils.text_to_json("There is no current RAT", 404)
 
@@ -141,20 +137,37 @@ class RatTracker:
                 user.reset_rat_holder(20)
                 return self.utils.text_to_json("Time limit exceeded", 403)
 
-            answer_response = self.check_answer(user, data)
-            if answer_response:
-                user.current_correct += 1
-                if user.current_correct == len(self.rats[user.current_rat].questions):
-                    user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
-                    if type_of_user != 0:
-                        self.groups[user_group_index].active_members -= 1
-                    return self.utils.text_to_json("Completed RAT", 200)
-
-                return self.utils.text_to_json("Correct answer", 200)
-            elif not answer_response:
-                return self.utils.text_to_json("Incorrect answer", 200)
+            if type_of_user == 2:
+                # expected = {
+                #     [number, option]
+                #     [number, option]
+                #     [number, option]
+                #     ...
+                # }
+                for answer in data:
+                    user.current_answers.append(answer)
+                print(user.current_answers)
+                user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
+                return self.utils.text_to_json("Completed RAT", 200)
             else:
-                return self.utils.text_to_json("Invalid answer", 404)
+                # expected = {
+                #     "question": "number (1-10)"
+                #     "option": "option_number (1-4)"
+                # }
+                answer_response = self.check_answer(user, data)
+                if answer_response:
+                    user.current_correct += 1
+                    if user.current_correct == len(self.rats[user.current_rat].questions):
+                        user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
+                        if type_of_user != 0:
+                            self.groups[user_group_index].active_members.remove(user.username)
+                        return self.utils.text_to_json("Completed RAT", 200)
+
+                    return self.utils.text_to_json("Correct answer", 200)
+                elif not answer_response:
+                    return self.utils.text_to_json("Incorrect answer", 200)
+                else:
+                    return self.utils.text_to_json("Invalid answer", 404)
         elif "/leaderboard" in api_path:
             if user.is_admin:
                 users, groups, rats = self.get_leaderboard()

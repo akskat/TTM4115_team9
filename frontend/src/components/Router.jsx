@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import Login from "./Login"
-import Overview from "./Overview"
+import RatOverview from "./RatOverview"
 import AdminOverview from "./AdminOverview";
 
 const Router = () => {
     const [isAdmin, setIsAdmin] = useState(false)
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState("user1")
 
     const logInResponse = (response) => {
         if (response.data.message === "admin") {
@@ -29,7 +29,7 @@ const Router = () => {
                     />
                 :
                     isAdmin === false ?
-                        <Overview
+                        <RatOverview
                             username={username}
                         />
                     :

@@ -34,7 +34,7 @@ class Group(RatHolder):
         super().__init__()
         self.group_number = group_number
         self.members = []
-        self.active_members = 0
+        self.active_members = []
 
     def add_member(self, user):
         self.members.append(user)

@@ -21,7 +21,7 @@ const Login = (props) => {
 
     return (
         <>
-            <h1>Online RAT</h1>
+            <h1>Login</h1>
             <input type="text" id="username" placeholder="Username"/>
             <input type="text" id="password" placeholder="Password"/>
             <button type="button" onClick={() => loginRequest()}>Login</button>
