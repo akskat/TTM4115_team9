@@ -6,6 +6,7 @@ const RatOverview = (props) => {
     const [ratCode, setRatCode] = useState("")
     const [canDoTeamRat, setCanDoTeamRat] = useState(false)
     let currentRatQuestion = [null, null]
+    let timer = null
 
     const setRat = (response) => {
         if (response.status === 200) {
@@ -19,6 +20,7 @@ const RatOverview = (props) => {
 
     const ratCallback = (response) => {
         if (response.status === 200) {
+            clearTimeout(timer)
             setCanDoTeamRat(true)
         }
         else {
@@ -182,7 +184,7 @@ const RatOverview = (props) => {
             button.innerText = "Submit answers"
             rat.appendChild(button)
 
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 alert("20 minutes have gone by, submitting")
                 submitAnswers(document.getElementById("ratDiv"), true)
             }, 1000 * 60 * 20)
