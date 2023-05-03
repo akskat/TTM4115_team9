@@ -24,7 +24,7 @@ class RatTracker:
         if "request/group" in topic:
             topic_length = len("group9/request/group")
             try:
-                return int(topic(topic_length)), 0
+                return int(topic[topic_length]), 0
             except ValueError:
                 return "Invalid group number", -1
         else:
@@ -110,7 +110,7 @@ class RatTracker:
             if user.current_rat != rat_index and user.current_rat != -1:
                 return self.utils.text_to_json("Another RAT is under process", 403)
 
-            if type_of_user == 0 and len(user.active_members) != 0 and user.username not in self.groups[user_group_index].active_members:
+            if type_of_user == 0 and len(user.active_members) != 0:
                 return self.utils.text_to_json("Some members are still doing the RAT", 403)
 
             if isinstance(rat_index, int):
@@ -124,6 +124,9 @@ class RatTracker:
                 user.time_started = datetime.now()
                 if type_of_user != 0:
                     self.groups[user_group_index].active_members.append(user.username)
+                else:
+                    for question in self.rats[rat_index].questions:
+                        user.current_answers.append([])
                 # Returns the RAT with questions in JSON format
                 return self.utils.text_to_json(self.rats[rat_index].get_rat_json(), 200, True)
             else:
@@ -146,8 +149,8 @@ class RatTracker:
                 # }
                 for answer in data:
                     user.current_answers.append(answer)
-                print(user.current_answers)
                 user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
+                self.groups[user_group_index].active_members.remove(user.username)
                 return self.utils.text_to_json("Completed RAT", 200)
             else:
                 # expected = {
@@ -159,8 +162,6 @@ class RatTracker:
                     user.current_correct += 1
                     if user.current_correct == len(self.rats[user.current_rat].questions):
                         user.reset_rat_holder((datetime.now() - user.time_started).seconds / 60)
-                        if type_of_user != 0:
-                            self.groups[user_group_index].active_members.remove(user.username)
                         return self.utils.text_to_json("Completed RAT", 200)
 
                     return self.utils.text_to_json("Correct answer", 200)

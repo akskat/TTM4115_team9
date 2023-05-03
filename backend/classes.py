@@ -89,8 +89,8 @@ class Rat:
 
     def check_answer(self, user, question_number, option_number):
         try:
-            user.current_answers[question_number - 1].append(option_number - 1)
-            if self.questions[question_number - 1][1][option_number - 1][1]:
+            user.current_answers[question_number].append(option_number)
+            if self.questions[question_number][1][option_number][1]:
                 return True
             else:
                 return False
