@@ -6,7 +6,7 @@ Init virtual environment
 
 cd backend
 
-python3 -m venv venv
+python -m venv venv
 
 windows: .\venv\Scripts\activate
 
@@ -17,6 +17,8 @@ once activated
 pip install flask
 
 pip install flask_cors
+
+python server.py
 
 # Frontend
 cd frontend
