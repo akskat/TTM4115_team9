@@ -10,7 +10,8 @@ def verify_user(data, groups, utils):
                 # check if the current member's login details matches the database
                 if member.username == username and member.password == password:
                     response = {
-                        "username": username
+                        "username": username,
+                        "group": group.group_number
                     }
                     if group.group_number == "admin":
                         response["message"] = "admin"
