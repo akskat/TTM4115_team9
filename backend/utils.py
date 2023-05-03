@@ -19,7 +19,7 @@ class Utils:
         return response
 
 
-def read_group_file(file_name="backend\\groups.txt"):
+def read_group_file(file_name="groups.txt"):
     with open(file_name) as file:
         groups = []
         for line in file:
@@ -44,7 +44,7 @@ def read_group_file(file_name="backend\\groups.txt"):
         return groups, return_users
 
 
-def read_rats_file(file_name='backend\\rat_array.txt'):
+def read_rats_file(file_name='rat_array.txt'):
     with open(file_name, 'r') as file:
         data = json.load(file)
 
