@@ -66,25 +66,19 @@ class RatTracker:
         for user in self.users:
             if user.is_admin:
                 continue
-            score = user.get_score()
-            json_user = ["username: {}".format(user.username)]
-            if score == "EMPTY_ARRAY":
-                json_user.append(["empty: {}".format(True)])
-            else:
-                json_user.append(["empty: {}".format(False)])
-                json_user.append(["data: {}".format(score)])
+            json_user = {
+                "username": user.username,
+                "rats": user.get_score()
+            }
             users.append(json_user)
         for group in self.groups:
             if group.group_number == "admin":
                 continue
-            score = group.get_score()
-            json_group = ["username: {}".format(group.group_number)]
-            if score == "EMPTY_ARRAY":
-                json_group.append(["empty: {}".format(True)])
-            else:
-                json_group.append(["empty: {}".format(False)])
-                json_group.append(["data: {}".format(score)])
-            groups.append(json_user)
+            json_group = {
+                "username": group.group_number,
+                "rats": group.get_score()
+            }
+            groups.append(json_group)
         for rat in self.rats:
             rats.append(rat.get_rat_json(True))
         return users, groups, rats
@@ -103,7 +97,6 @@ class RatTracker:
             elif type_of_user == 1:
                 # is a admin
                 user = self.users[user_index]
-                user.is_admin = True
             elif type_of_user == 2:
                 # is a user
                 user = self.users[user_index]
@@ -180,7 +173,6 @@ class RatTracker:
                 else:
                     return self.utils.text_to_json("Invalid answer", 404)
         elif "/leaderboard" in api_path:
-            print(data)
             if data["group"] == "admin":
                 users, groups, rats = self.get_leaderboard()
                 return_json = {

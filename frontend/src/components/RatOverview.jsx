@@ -74,7 +74,6 @@ const RatOverview = (props) => {
     const checkAnswerCallback = (response) => {
         let question = currentRatQuestion[0]
         let option = question.children[currentRatQuestion[1]]
-        console.log(response)
         if (response.status === 200) {
             if (response.data.message === "Incorrect answer") {
                 option.disabled = true

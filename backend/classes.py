@@ -20,9 +20,9 @@ class RatHolder:
         return_json = []
         if len(self.completed_rats) == 0:
             return "EMPTY ARRAY"
-        for i, rat in enumerate(self.completed_rats):
+        for rat in self.completed_rats:
             rat_json = {
-                "number": i,
+                "number": rat[0],
                 "time_taken": rat[1],
                 "answers": rat[2]
             }
@@ -43,20 +43,11 @@ class Group(RatHolder):
 
 
 class User(RatHolder):
-    def __init__(self, username, password="", is_admin=False):
+    def __init__(self, username, password, is_admin=False):
         super().__init__()
         self.username = username
         self.password = password
         self.is_admin = is_admin
-
-    def get_username(self):
-        return self.username
-
-    def get_password(self):
-        return self.password
-
-    def get_is_admin(self):
-        return self.is_admin
 
 
 class Rat:
