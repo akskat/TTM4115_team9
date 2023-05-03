@@ -4,7 +4,7 @@ import RatOverview from "./RatOverview"
 import AdminOverview from "./AdminOverview";
 
 const Router = () => {
-    const [username, setUsername] = useState("user1")
+    const [username, setUsername] = useState("")
     const [group, setGroup] = useState("")
 
     const logInResponse = (response) => {
