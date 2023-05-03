@@ -9,7 +9,7 @@ const AdminOverview = (props) => {
     const restTables = () => {
         const baseTable = "<thead>\n" +
             "                                <tr>\n" +
-            "                                    <th>Group</th>\n" +
+            "                                    <th></th>\n" +
             "                                    <th>RAT number</th>\n" +
             "                                    <th>Time taken (min)</th>" +
             "                                    <th>Score</th>" +
