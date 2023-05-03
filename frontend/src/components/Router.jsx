@@ -4,15 +4,13 @@ import RatOverview from "./RatOverview"
 import AdminOverview from "./AdminOverview";
 
 const Router = () => {
-    const [isAdmin, setIsAdmin] = useState(false)
     const [username, setUsername] = useState("user1")
+    const [group, setGroup] = useState("")
 
     const logInResponse = (response) => {
-        if (response.data.message === "admin") {
-            setIsAdmin(true)
-        }
         if (response.status === 200) {
             setUsername(response.data.username)
+            setGroup(response.data.group)
         }
         else {
             return alert(response)
@@ -28,9 +26,10 @@ const Router = () => {
                         callback={logInResponse}
                     />
                 :
-                    isAdmin === false ?
+                    group !== "admin" ?
                         <RatOverview
                             username={username}
+                            group={group}
                         />
                     :
                         <AdminOverview/>
