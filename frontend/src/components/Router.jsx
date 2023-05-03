@@ -32,7 +32,10 @@ const Router = () => {
                             group={group}
                         />
                     :
-                        <AdminOverview/>
+                        <AdminOverview
+                            username={username}
+                            group={group}
+                        />
             }
         </>
     )

@@ -18,6 +18,8 @@ class RatHolder:
 
     def get_score(self):
         return_json = []
+        if len(self.completed_rats) == 0:
+            return "EMPTY ARRAY"
         for i, rat in enumerate(self.completed_rats):
             rat_json = {
                 "number": i,

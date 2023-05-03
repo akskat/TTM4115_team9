@@ -66,15 +66,25 @@ class RatTracker:
         for user in self.users:
             if user.is_admin:
                 continue
-            json_user = user.get_score()
-            json_user.append("username: {}".format(user.username))
+            score = user.get_score()
+            json_user = ["username: {}".format(user.username)]
+            if score == "EMPTY_ARRAY":
+                json_user.append(["empty: {}".format(True)])
+            else:
+                json_user.append(["empty: {}".format(False)])
+                json_user.append(["data: {}".format(score)])
             users.append(json_user)
         for group in self.groups:
             if group.group_number == "admin":
                 continue
-            json_group = group.get_score()
-            json_group.append("group_number: {}".format(group.group_number))
-            groups.append(json_group)
+            score = group.get_score()
+            json_group = ["username: {}".format(group.group_number)]
+            if score == "EMPTY_ARRAY":
+                json_group.append(["empty: {}".format(True)])
+            else:
+                json_group.append(["empty: {}".format(False)])
+                json_group.append(["data: {}".format(score)])
+            groups.append(json_user)
         for rat in self.rats:
             rats.append(rat.get_rat_json(True))
         return users, groups, rats
@@ -170,7 +180,8 @@ class RatTracker:
                 else:
                     return self.utils.text_to_json("Invalid answer", 404)
         elif "/leaderboard" in api_path:
-            if user.is_admin:
+            print(data)
+            if data["group"] == "admin":
                 users, groups, rats = self.get_leaderboard()
                 return_json = {
                     "users": users,
