@@ -10,6 +10,8 @@ python3 -m venv venv
 
 windows: .\venv\Scripts\activate
 
+mac / linux: source venv/bin/activate
+
 once activated
 
 pip install flask
