@@ -11,7 +11,7 @@ const AdminOverview = (props) => {
             "                                <tr>\n" +
             "                                    <th>Group</th>\n" +
             "                                    <th>RAT number</th>\n" +
-            "                                    <th>Time taken</th>" +
+            "                                    <th>Time taken (min)</th>" +
             "                                    <th>Score</th>" +
             "                                </tr>\n" +
             "                            </thead>"
@@ -31,7 +31,7 @@ const AdminOverview = (props) => {
 
     const getScoreFromRats = (rat, table_name) => {
         const number = rat.number + 1
-        const time = rat.time_taken
+        const time = Math.round(rat.time_taken * 100) / 100
         let score = 0
         for (let i = 0; i < rat.answers.length; i++) {
             if (table_name === "groupTable") {
@@ -65,7 +65,7 @@ const AdminOverview = (props) => {
                 let score_row = row.insertCell(3)
                 name_row.innerHTML = name
                 rat_row.innerHTML = number
-                time_row.innerHTML = time
+                time_row.innerHTML = time + ""
                 score_row.innerHTML = score + ""
             }
         }

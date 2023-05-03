@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import Post from "./api/Post";
 
 const RatOverview = (props) => {
@@ -86,10 +86,7 @@ const RatOverview = (props) => {
                     }
                 }
                 if (response.data.message === "Completed RAT") {
-                    alert("You have completed the team RAT")
-                    setRatData(null)
-                    setRatCode(null)
-                    setCanDoTeamRat(null)
+                    if(!alert('You have completed the team RAT')){window.location.reload();}
                 }
             }
             currentRatQuestion = [null, null]
@@ -126,7 +123,7 @@ const RatOverview = (props) => {
             unWrapRat()
         }
         else {
-            return alert("Some members are still doing the RAT")
+            return alert("Some members are still doing the RAT or the team RAT has been completed")
         }
     }
 
