@@ -34,9 +34,9 @@ const AdminOverview = (props) => {
         const time = Math.round(rat.time_taken * 100) / 100
         let score = 0
         for (let i = 0; i < rat.answers.length; i++) {
-            if (table_name === "groupTable") {
+            if (table_name === "groupTable" && rat.answers[i][0] !== "") {
                 score += getScore(rat.number, i, rat.answers[i][0])
-            } else {
+            } else if (table_name === "userTable" && rat.answers[i][1] !== "") {
                 score += getScore(rat.number, rat.answers[i][0], rat.answers[i][1])
             }
         }

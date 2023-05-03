@@ -45,27 +45,29 @@ const RatOverview = (props) => {
         }
     }
 
-    const submitAnswers = (ratDiv) => {
+    const submitAnswers = (ratDiv, forced=false) => {
         let answers = []
         let questionNumber = 0
-        for (let i = 0; i < ratDiv.children.length; i++) {
-            if (ratDiv.children[i].nodeName === "DIV") {
-                const question = document.getElementById("question" + questionNumber)
-                let optionNumber = 0
-                let checked = false
-                for (let j = 0; j < question.children.length; j++) {
-                    if (question.children[j].nodeName === "INPUT") {
-                        if (question.children[j].checked) {
-                            answers.push([questionNumber, optionNumber])
-                            checked = true
+        if (!forced) {
+            for (let i = 0; i < ratDiv.children.length; i++) {
+                if (ratDiv.children[i].nodeName === "DIV") {
+                    const question = document.getElementById("question" + questionNumber)
+                    let optionNumber = 0
+                    let checked = false
+                    for (let j = 0; j < question.children.length; j++) {
+                        if (question.children[j].nodeName === "INPUT") {
+                            if (question.children[j].checked) {
+                                answers.push([questionNumber, optionNumber])
+                                checked = true
+                            }
+                            optionNumber++
                         }
-                        optionNumber++
                     }
+                    if (!checked) {
+                        return alert("Missing answer in question " + (questionNumber + i))
+                    }
+                    questionNumber++
                 }
-                if (!checked) {
-                    return alert("Missing answer in question " + (questionNumber + i))
-                }
-                questionNumber++
             }
         }
         Post(answers, "/group9/request/" + props.username + "/question", ratCallback)
@@ -179,6 +181,15 @@ const RatOverview = (props) => {
             button.onclick = () => submitAnswers(document.getElementById("ratDiv"))
             button.innerText = "Submit answers"
             rat.appendChild(button)
+
+            setTimeout(() => {
+                alert("20 minutes have gone by, submitting")
+                submitAnswers(document.getElementById("ratDiv"), true)
+            }, 1000 * 60 * 20)
+        } else {
+            setTimeout(() => {
+                if(!alert('20 minutes have gone by, RAT over')){window.location.reload();}
+            }, 1000 * 60 * 20)
         }
     }
 
